@@ -1,6 +1,18 @@
+header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  padding: 0px;
+  box-sizing: border-box;
+  background: #002242;
+  font: normal 14px "Jura", "Noto Sans", sans-serif;
+}
+
 body {
   padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background: #000700;
+  color: #F0FFE0;
+  font: normal 14px/1.6 "Jura", "Noto Sans", sans-serif;
 }
 
 a {
