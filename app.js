@@ -25,16 +25,18 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.post('/update_user_uid',
+
+app.get('/test',
 	function(req, res)
 	{
-		const crypto = require("crypto");
-		const id = crypto.randomBytes(12).toString("hex");
-		res.json(
-			{
-				"id" : id
-			}
-		);
+    res.send('[GET] test() called');
+	}
+);
+
+app.post('/test',
+	function(req, res)
+	{
+    res.send('[POST] test() called');
 	}
 );
 

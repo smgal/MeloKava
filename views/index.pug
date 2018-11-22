@@ -1,5 +1,93 @@
 extends layout
 
 block content
+  div#sm_player.jp-jplayer
+
   h1= title
-  p Welcome to #{title}
+  p.sub_title #{title} is AI-generated music service
+  br
+  p.sub_title Sample music (pre-generated)
+  button(onclick="onClickPlayMusic()")
+    font(size="3rem") [PLAY]
+  button(onclick="onClickStopMusic()")
+    font(size="3rem") [STOP]
+  br
+  br
+  p.ai_link(onclick="onClickLoadMusic()")
+    font(size="5rem") [CLICK to play AI Generated Music]
+
+  script.
+    function onClickPlayMusic() {
+      $("#sm_player").jPlayer("play");
+    }
+
+    function onClickStopMusic() {
+      $("#sm_player").jPlayer("stop");
+    }
+
+    function onClickLoadMusic() {
+      var user_uid = "";
+      $("#sm_player").jPlayer("stop");
+      $("#sm_player").jPlayer("setMedia",
+        {
+          title: ""
+        }
+      );
+      $.post("/users/register", (data) => {
+          user_uid = (data.result) ? data.id : 0;
+        }, "json"
+      ).done(() => {
+        //alert("user_uid = " + user_uid);
+        $.get("/users/" + user_uid, (data) => {
+            //alert("[1] " + data.title + " [2] " + data.file_name);
+            setTimeout((in_title, in_file_name) => {
+              $("#sm_player").jPlayer("setMedia",
+                {
+                  title: in_title,
+                  m4a: in_file_name
+                }
+              );
+              $("#sm_player").jPlayer("play");
+            }, 200, data.title, data.file_name);
+          }, "json");
+        }
+      ).fail(() => {
+          alert("onClickPlayMusic() failed");
+        }
+      ).always(() => {
+          // alert("finished");
+        }
+      );
+    }
+
+  script.
+    $(document).ready(() => {
+      $("#sm_player").jPlayer(
+        {
+          ready:function(event)
+          {
+            $(this).jPlayer(
+              "setMedia",
+              {
+                title: "Reference song by AI",
+                m4a: "sounds/AI_generated_chill_music.mp3",
+              }
+            );
+          },
+          play: function() { // To avoid multiple jPlayers playing together.
+            $(this).jPlayer("pauseOthers");
+          },            
+          errorAlerts: true,
+          swfPath: "http://jplayer.org/latest/dist/jplayer",
+          supplied: "m4a",
+          wmode: "window",
+          solution: "html",
+          useStateClassSkin: true,
+          autoBlur: false,
+          smoothPlayBar: true,
+          keyEnabled: true,
+          remainingDuration: true,
+          toggleDuration: true
+        }
+      );
+    });                                      

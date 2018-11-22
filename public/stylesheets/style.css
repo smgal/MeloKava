@@ -6,7 +6,6 @@ ul {
   margin: 0;
 }
 
-
 header {
   position: fixed;
   top: 0;
@@ -27,6 +26,10 @@ body {
 p.ai_link {
   color: #FFB700;
   cursor: pointer;
+}
+
+p.sub_title {
+  font: normal 1.3rem "Jura", "Noto Sans", sans-serif;
 }
 
 a {
