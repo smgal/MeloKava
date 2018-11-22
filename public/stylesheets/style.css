@@ -1,3 +1,12 @@
+
+body,
+h1,
+ul {
+  font-family: 'Jura', sans-serif;
+  margin: 0;
+}
+
+
 header {
   position: fixed;
   top: 0;
@@ -13,6 +22,11 @@ body {
   background: #000700;
   color: #F0FFE0;
   font: normal 14px/1.6 "Jura", "Noto Sans", sans-serif;
+}
+
+p.ai_link {
+  color: #FFB700;
+  cursor: pointer;
 }
 
 a {
