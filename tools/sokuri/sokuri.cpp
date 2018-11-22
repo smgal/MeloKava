@@ -62,9 +62,15 @@ static void searchAllFiles(std::vector<FileInfo>& out_list, const std::string& r
 int main()
 {
 	std::vector<FileInfo> result;
-	std::string root_path = "x:/";
 
-	searchAllFiles(result, root_path);
+	std::vector<std::string> root_paths =
+	{
+		"y:/",
+		"x:/"
+	};
+
+	for (const auto& path : root_paths)
+		searchAllFiles(result, path);
 
 	std::sort(result.begin(), result.end(), [](const FileInfo& a, const FileInfo& b) -> bool
 	{
