@@ -16,10 +16,9 @@ block content
   p.ai_link(onclick="onClickLoadMusic()")
     font(size="5rem") [CLICK to play AI Generated Music]
 
-
-  //- form(id="form1" name="form1" method="post" action="/helo" onsubmit="return false;"> <input type="text" id="input1" name="input1" value="<%= input %>"> <input type="button" id="btn" value="click" onclick="doAction();"> </form> </body>
-
-
+  br
+  button(onclick="onClickTest()")
+    font(size="3rem" color="0000FF") [TEST]
 
   script.
     function onClickPlayMusic() {
@@ -30,14 +29,29 @@ block content
       $("#sm_player").jPlayer("stop");
     }
 
+    function onClickTest() {
+      var param1 = 'sample.json';
+      var arr = { id: 'qwertyuiop', num: 10 };
+      $.ajax({
+        url: '/test?param1=' + param1,
+        type: 'POST',
+        data: JSON.stringify(arr),
+        contentType: 'application/json; charset=utf-8',
+        dataType: 'json',
+        async: false,
+        success: function(result) {
+          alert("#1: " + result.param1 + "\n#2: " + result.json_id);
+        }
+      });
+    }
+
     function onClickLoadMusic() {
       var user_uid = "";
       $("#sm_player").jPlayer("stop");
-      $("#sm_player").jPlayer("setMedia",
-        {
-          title: ""
-        }
-      );
+      $("#sm_player").jPlayer("setMedia", {
+        title: ""
+      });
+
       $.post("/users/register", (data) => {
           user_uid = (data.result) ? data.id : 0;
         }, "json"
@@ -53,7 +67,7 @@ block content
                 }
               );
               $("#sm_player").jPlayer("play");
-            }, 200, data.title, data.file_name);
+            }, 200, data.title, data.ref_file_name); // data.file_name
           }, "json");
         }
       ).fail(() => {
@@ -67,99 +81,29 @@ block content
 
   script.
     $(document).ready(() => {
-      $("#sm_player").jPlayer(
-        {
-          ready:function(event)
-          {
-            $(this).jPlayer(
-              "setMedia",
-              {
-                title: "Reference song by AI",
-                m4a: "sounds/AI_generated_chill_music.mp3",
-              }
-            );
-          },
-          play: function() { // To avoid multiple jPlayers playing together.
-            $(this).jPlayer("pauseOthers");
-          },            
-          errorAlerts: true,
-          swfPath: "http://jplayer.org/latest/dist/jplayer",
-          supplied: "m4a",
-          wmode: "window",
-          solution: "html",
-          useStateClassSkin: true,
-          autoBlur: false,
-          smoothPlayBar: true,
-          keyEnabled: true,
-          remainingDuration: true,
-          toggleDuration: true
-        }
-      );
+      $("#sm_player").jPlayer({
+        ready: function(event) {
+          $(this).jPlayer(
+            "setMedia",
+            {
+              title: "Reference song by AI",
+              m4a: "sounds/AI_generated_chill_music.mp3",
+            }
+          );
+        },
+        play: function() { // To avoid multiple jPlayers playing together.
+          $(this).jPlayer("pauseOthers");
+        },            
+        errorAlerts: true,
+        swfPath: "http://jplayer.org/latest/dist/jplayer",
+        supplied: "m4a",
+        wmode: "window",
+        solution: "html",
+        useStateClassSkin: true,
+        autoBlur: false,
+        smoothPlayBar: true,
+        keyEnabled: true,
+        remainingDuration: true,
+        toggleDuration: true
+      });
     });                                      
-
-  script.
-    var ajax = null;
-
-    function doAction() {
-      var input = document.getElementById("input1");
-      var callback = function() {
-        var target = document.getElementById("msg");
-        var res = JSON.parse(ajax.getResponse());
-        target.textContent = "you send::" + res.msg;
-      }
-      
-      ajax = new AjaxObject('/helo?input1=' + input.value,callback);
-    }
-    
-    function AjaxObject(url,callback) {
-      var response = null;
-      var callback = callback;
-      ajaxStart(url);
-      this.getResponse = function() {
-        return response;
-      }
-      
-      function ajaxStart(url) {
-        var req = createRequest();
-        if (req == null) {
-          alert("実行できません！");
-          return;
-        }
-        req.open("POST",url);
-        req.setRequestHeader ("User-Agent","XMLHttpRequest");
-        req.onreadystatechange = function() {
-          if (this.readyState == 4 && this.status == 200) {
-            precallback(this);
-          }
-        }
-        req.send();
-      }
-      
-      function createRequest() {
-        var httplist = [
-          function() {
-            return new XMLHttpRequest();
-          }, function() {
-            return new ActiveXObjct("Msxml2.XMLHTTP");
-          }, function() {
-            return new ActiveXObject("Microsoft.XMLHTTP");
-          }
-        ];
-
-        for (var i = 0; i < httplist.length; i++) {
-          try {
-            var http = httplist[i]();
-            if (http != null)
-              return http;
-          }
-          catch(e) {
-            continue;
-          }
-        }
-        return null;
-      }
-      
-      function precallback(request) {
-        response = request.responseText; callback();
-      }
-    }

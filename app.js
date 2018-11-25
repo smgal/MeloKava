@@ -26,19 +26,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
-app.get('/test',
-	function(req, res)
-	{
-    res.send('[GET] test() called');
-	}
-);
+app.get('/test', function(req, res) {
+	res.send('[GET] test() called');
+});
 
-app.post('/test',
-	function(req, res)
-	{
-    res.send('[POST] test() called');
-	}
-);
+app.post('/test', function(req, res) {
+	res.json({
+		"param1": req.query.param1,
+		"json_id": req.body["id"],
+	});
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

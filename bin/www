@@ -12,8 +12,12 @@ var http = require('http');
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
+const PORT_NUM = '10100';
+
+var port = normalizePort(process.env.PORT || PORT_NUM);
 app.set('port', port);
+
+console.log('[SMGAL] PORT_NUM: ' + PORT_NUM);
 
 /**
  * Create HTTP server.
