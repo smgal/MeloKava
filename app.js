@@ -34,6 +34,7 @@ app.post('/test', function(req, res) {
 	res.json({
 		"param1": req.query.param1,
 		"json_id": req.body["id"],
+		"json_bpm": req.body["bpm"],
 	});
 });
 

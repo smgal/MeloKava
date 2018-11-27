@@ -31,16 +31,46 @@ block content
 
     function onClickTest() {
       var param1 = 'sample.json';
-      var arr = { id: 'qwertyuiop', num: 10 };
+      var json_arr =
+      {
+        "id": "66c4e6b5ffa0e8cdee987993",
+        "title": "SAMPLE melody descriptor",
+        "genre": "DEEP~ND",
+        "bpm": 90,
+        "key_signature": "F",
+        "beats": 4,
+
+        "seed_cg": 123,
+        "seed_ag": 123456,
+        "seed_channel": 123456,
+
+        "chords_notes": 
+        [
+          { "chords": "F[0]", "n": [[69,240], [70,240], [72,240], [77,240], [77,960]] },
+          { "chords": "C[0]", "n": [[76,480], [72,480], [72,480], [74,480]] },
+          { "chords": "Bb[0]", "n": [[74,1440], [0,480]] },
+          { "chords": "Bbm[0]", "n": [[73,480], [72,480], [72,480], [70,480]] },
+          { "chords": "F[0]", "n": [[69,240], [70,240], [72,240], [77,240], [77,960]] },
+          { "chords": "C[0]", "n": [[76,480], [72,480], [72,480], [74,480]] },
+          { "chords": "Bb[0]", "n": [[70,1440], [0,480]] },
+          { "chords": "Csus4[0]", "n": [[67,480], [69,480], [69,480], [67,480]] },
+          { "chords": "F[0]", "n": [[65,1440]] }
+        ]
+      };
+
       $.ajax({
-        url: '/test?param1=' + param1,
+        url: '/test?param1=' + json_arr.id,
         type: 'POST',
-        data: JSON.stringify(arr),
+        data: JSON.stringify(json_arr),
         contentType: 'application/json; charset=utf-8',
         dataType: 'json',
         async: false,
         success: function(result) {
-          alert("#1: " + result.param1 + "\n#2: " + result.json_id);
+          alert(
+            "#1: " + result.param1 + "\n" +
+            "#2: " + result.json_id + "\n" +
+            "#3: " + result.json_bpm
+          );
         }
       });
     }
